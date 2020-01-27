@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        imwidget.cpp
+        imwidget.cpp \
+    imwidgetservies.cpp
 
-HEADERS  += imwidget.h
+HEADERS  += imwidget.h \
+    imwidgetservies.h
 
 FORMS    += imwidget.ui
