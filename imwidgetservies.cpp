@@ -2,15 +2,65 @@
 
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsScene>
+#include <QResizeEvent>
+
+//view
+class ViewPrivate
+{
+public:
+    QGraphicsScene *pScene;
+    qreal sceneHeight;
+    ViewPrivate()
+        : pScene(NULL)
+    {
+        sceneHeight = 0;
+    }
+};
+
+View::View(QWidget *parent)
+    : QGraphicsView(parent)
+    , m_pd(new ViewPrivate)
+{
+    m_pd->pScene = new QGraphicsScene(this);
+    setScene(m_pd->pScene);
+
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+}
+
+void View::addMsg(const QString &strText)
+{
+    ChatHead* pHead = new ChatHead(this);
+    pHead->setRect(0, 0, 20, 20);
+    pHead->setPos(0, m_pd->sceneHeight);
+    m_pd->pScene->addItem(pHead);
+
+    ChatMsg* pMsg = new ChatMsg(this);
+    pMsg->setRect(20, 0, width(), 20);
+    pMsg->setPos(25, m_pd->sceneHeight);
+    pMsg->setText(strText);
+    m_pd->pScene->addItem(pMsg);
+
+    m_pd->sceneHeight += 25;
+    m_pd->pScene->setSceneRect(0, 0, width(), m_pd->sceneHeight);
+
+}
+
+void View::resizeEvent(QResizeEvent *event)
+{
+    m_pd->pScene->setSceneRect(0, 0, event->size().width(), m_pd->sceneHeight);
+    setSceneRect(0, 0, width(), height());
+}
 
 //base
-ImWidgetservies::ImWidgetservies(QObject *parent)
+BaseItem::BaseItem(QObject *parent)
     : QObject(parent)
 {
 
 }
 
-ImWidgetservies::~ImWidgetservies()
+BaseItem::~BaseItem()
 {
 
 }
@@ -27,7 +77,7 @@ public:
 };
 
 ChatHead::ChatHead(QObject *parent)
-    : ImWidgetservies(parent)
+    : BaseItem(parent)
     , m_pd(new ChatHeadPrivate)
 {
 
@@ -72,11 +122,11 @@ public:
     QString strMsg;
     ChatMsgPrivate()
     {
-        rect.setRect(0, 0, 200, 30);
+        rect.setRect(0, 0, 30, 30);
     }
 };
 ChatMsg::ChatMsg(QObject *parent)
-    : ImWidgetservies(parent)
+    : BaseItem(parent)
     , m_pd(new ChatMsgPrivate)
 {
 
@@ -96,9 +146,9 @@ void ChatMsg::setRect(int ix, int iy, int iw, int ih)
     m_pd->rect.setRect(ix, iy, iw, ih);
 }
 
-void ChatMsg::addStrMsg(const QString &strMsg)
+void ChatMsg::setText(const QString &strMsg)
 {
-    m_pd->strMsg.append(strMsg);
+    m_pd->strMsg = strMsg;
 }
 
 QRectF ChatMsg::boundingRect() const
@@ -112,11 +162,14 @@ void ChatMsg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
     Q_UNUSED(option);
 
     painter->save();
-    painter->setPen(Qt::white);
-    painter->setBrush(Qt::blue);
+    painter->setPen(Qt::black);
+    painter->setBrush(Qt::NoBrush);
 
     //paint text
     painter->drawText(m_pd->rect, m_pd->strMsg);
 
     painter->restore();
 }
+
+
+

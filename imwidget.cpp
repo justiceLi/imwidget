@@ -15,7 +15,6 @@ ImWidget::ImWidget(QWidget *parent) :
 {
     m_pd->ui.setupUi(this); 
 
-    initUi();
 
     connect(m_pd->ui.pb_sendMsg, SIGNAL(clicked()),
             this, SLOT(slot_pBtn_sendMsg_clicked()));
@@ -31,18 +30,9 @@ ImWidget::~ImWidget()
     }
 }
 
-void ImWidget::initUi()
+void ImWidget::addMsgLog(const QString &strText)
 {
-    m_pd->ui.graphicsView->setScene(&m_pd->scene);
-}
-
-void ImWidget::addMsgText(const QString &strText)
-{
-    ChatMsg *pMsg = new ChatMsg(this);
-    pMsg->addStrMsg(strText);
-    m_pd->scene.addItem(pMsg);
-    ChatHead *pHead = new ChatHead(this);
-    m_pd->scene.addItem(pHead);
+    m_pd->ui.graphicsView->addMsg(strText);
 }
 
 void ImWidget::slot_pBtn_sendMsg_clicked()
@@ -51,6 +41,6 @@ void ImWidget::slot_pBtn_sendMsg_clicked()
     {
         QString strText =  m_pd->ui.te_input->toPlainText().trimmed();
 
-        addMsgText(strText);
+        addMsgLog(strText);
     }
 }

@@ -17,6 +17,7 @@ SOURCES += main.cpp\
     imwidgetservies.cpp
 
 HEADERS  += imwidget.h \
-    imwidgetservies.h
+    imwidgetservies.h \
+    imstruct.h
 
 FORMS    += imwidget.ui

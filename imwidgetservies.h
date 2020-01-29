@@ -3,9 +3,29 @@
 
 #include <QGraphicsItem>
 #include <QObject>
+#include <QGraphicsView>
+
+class BaseItem;
+class ChatHead;
+class ChatMsg;
+
+class ViewPrivate;
+class View : public QGraphicsView
+{
+    Q_OBJECT
+public:
+    View(QWidget* parent = NULL);
+
+    void addMsg(const QString &strText);
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    ViewPrivate* m_pd;
+};
 
 //base item
-class ImWidgetservies : public QObject, public QGraphicsItem
+class BaseItem : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
@@ -16,13 +36,13 @@ public:
         Role_other,
     };
 
-    explicit ImWidgetservies(QObject *parent = 0);
-    virtual ~ImWidgetservies();
+    explicit BaseItem(QObject *parent = 0);
+    virtual ~BaseItem();
 };
 
 //chathead
 class ChatHeadPrivate;
-class ChatHead : public ImWidgetservies
+class ChatHead : public BaseItem
 {
   Q_OBJECT
 public:
@@ -47,7 +67,7 @@ private:
 
 //ChatMsg
 class ChatMsgPrivate;
-class ChatMsg : public ImWidgetservies
+class ChatMsg : public BaseItem
 {
     Q_OBJECT
 public:
@@ -58,7 +78,7 @@ public:
     void setRect(int ix, int iy, int iw, int ih);
 
     //add msgstr
-    void addStrMsg(const QString &strMsg);
+    void setText(const QString &strMsg);
 
     // QGraphicsItem interface
 public:

@@ -14,7 +14,16 @@
    <string>ImWidget</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,3,0,1,0">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>9</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
     <number>9</number>
    </property>
    <item row="1" column="0" colspan="2">
@@ -32,7 +41,7 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="2">
-    <widget class="QGraphicsView" name="graphicsView"/>
+    <widget class="View" name="graphicsView"/>
    </item>
    <item row="4" column="0">
     <widget class="QTextEdit" name="te_input"/>
@@ -54,6 +63,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>View</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">imwidgetservies.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
